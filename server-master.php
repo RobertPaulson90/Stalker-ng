@@ -2,7 +2,7 @@
 $type = $_SERVER['REQUEST_METHOD'];
 if ($type == "GET") {
 	function queryDB ($lastId) {
-		$mysqlConnection = mysqli_connect("p:127.0.0.1","root","","stalker");
+		include('db.php');
 
 		// Check connection
 		if (mysqli_connect_errno($mysqlConnection))
@@ -37,7 +37,7 @@ if ($type == "GET") {
 
 	file_put_contents("lastId.txt", $nextId);
 } else if ($type == "POST") {
-	$mysqlConnection = mysqli_connect("p:127.0.0.1","root","","stalker");
+	include('db.php');
 
 	$data = file_get_contents('php://input');
 	$name = mysqli_real_escape_string($mysqlConnection, trim(preg_replace("/\([^)]+\)/","",json_decode($data)->name)));

@@ -5,7 +5,23 @@ var util = require('util'),
 	exec = require('child_process').exec,
 	cheerio = require('cheerio'),
 	http = require('http'),
+	program = require('commander'),
 	baseUrl = "http://battlelog.battlefield.com";
+
+program
+	.version('0.0.1')
+	.option('-h, --master_host <host>', 'master hostname')
+	.option('-p, --master_path <path>', 'master path')
+	.option('-P, --master_port <port>', 'master port')
+	.parse(process.argv);
+
+if (!program.master_port)
+	program.master_port = 80;
+
+if (!program.master_host || !program.master_path) {
+	console.log("You need to specify the host and path!");
+	program.help();
+}
 
 function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, playerUrl, callback) {
 	exec(util.format('curl --socks5 127.0.0.1:9050 %s/%s/user/%s', baseUrl, game, playerName),
@@ -66,9 +82,9 @@ function sendPlayer (data, callback) {
 	var post_data = JSON.stringify(data);
 
 	var post_options = {
-		host: "127.0.0.1",
-		port: 80,
-		path: "/bf3/server-master.php",
+		host: program.master_host,
+		port: program.master_port,
+		path: program.master_path,
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
@@ -90,9 +106,9 @@ function sendPlayer (data, callback) {
 
 function findPlayer (callback) {
 	var options = {
-		host: '127.0.0.1',
-		port: 80,
-		path: '/bf3/server-master.php'
+		host: program.master_host,
+		port: program.master_port,
+		path: program.master_path,
 	};
 
 	http.get(options, function(res) {
