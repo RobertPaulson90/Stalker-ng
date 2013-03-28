@@ -1,7 +1,7 @@
 <?php
-	$mysqlConnection = mysqli_connect("p:127.0.0.1","root","","stalker");
+	include("db.php");
 
-	$query = $mysqlConnection->query("SELECT data FROM players");
+	$query = $mysqlConnection->query("SELECT data FROM players WHERE id > 0");
 
 	$output = "{\"players\": [";
 	while ($row = $query->fetch_array(MYSQLI_ASSOC)) {
