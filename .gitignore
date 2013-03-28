@@ -17,3 +17,5 @@ node_modules/
 /lastId.txt
 
 /db.php
+
+/bf3stalker/api/db.php
