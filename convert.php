@@ -18,7 +18,8 @@ fclose($file_handle);
 unset($file_handle);
 
 foreach ($players as $player => $info) {
-	$name = ($info['alias'] ? "$player ({$info['alias']})" : $player);
+	$name = $player;
+	$alias = $info['alias']
 	$type = $info['type'];
 	$url = $info['url'];
 	$platform =$info['platform'];
@@ -26,6 +27,6 @@ foreach ($players as $player => $info) {
 
 	$mysqlConnection = mysqli_connect("p:127.0.0.1","root","","stalker");
 
-	$query = $mysqlConnection->query("INSERT INTO players (name, type, url, platform, game) VALUES ('$name', '$type', '$url', '$platform', '$game')");
+	$query = $mysqlConnection->query("INSERT INTO players (name, alias type, url, platform, game) VALUES ('$name', '$alias', '$type', '$url', '$platform', '$game')");
 }
 ?>
