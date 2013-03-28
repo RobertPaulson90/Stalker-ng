@@ -40,7 +40,7 @@ function addToTable (playerData) {
 	});
 }
 function refreshData () {
-	$.getJSON("api/players.json", function (data) {
+	$.getJSON("api/api.php", function (data) {
 		$("#example").dataTable().fnClearTable();
 		addToTable(data.players);
 		$("#example_length").html('<label>Data last updated: ' + timeConverter(data.timeStamp) + '</label>');
@@ -59,7 +59,7 @@ $(document).ready(function() {
 		showPage("about");
 	});
 	showCorrectPage();
-	$.getJSON("api/players.json", function (data) {
+	$.getJSON("api/api.php", function (data) {
 		$("#example_wrapper").prepend('<div id="example_length" class="dataTables_length"></div>');
 		refreshData();
 	});

@@ -15,9 +15,9 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 			var error = "",
 				gone = false,
 				result = {
-					name: 			(playerAlias ? playerName + " " + playerAlias : playerName),
+					name: 			(playerAlias ? playerName + " (" + playerAlias + ")" : playerName),
 					platform: 		playerPlatform,
-					battlelog: 		util.format("%s/%s/%s", baseUrl, game, playerName),
+					battlelog: 		util.format("%s/%s/user/%s", baseUrl, game, playerName),
 					type: 			playerType,
 					url: 			playerUrl,
 					status: 		"No",
