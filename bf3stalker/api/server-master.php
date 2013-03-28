@@ -42,9 +42,10 @@ if ($type == "GET") {
 	$data = file_get_contents('php://input');
 	$name = mysqli_real_escape_string($mysqlConnection, trim(preg_replace("/\([^)]+\)/","",json_decode($data)->name)));
 	$data = mysqli_real_escape_string($mysqlConnection, $data);
+	$timestamp = time();
 
 	if ($name != "" && $data != "") {
-		$mysqlConnection->query("UPDATE players SET data='$data' WHERE name='$name'");
+		$mysqlConnection->query("UPDATE players SET data='$data', timestamp='$timestamp' WHERE name='$name'");
 		echo "OK";
 	} else {
 		echo "ERROR";
