@@ -56,7 +56,7 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 					result.success = true;
 				});
 
-				$("a[href='/bf3/user/{$username}/'].base-avatar-status-overlay-online").map(function() {
+				$("a[href='/bf3/user/" + playerName + "/'].base-avatar-status-overlay-online").map(function() {
 					result.status = "Online";
 				});
 
