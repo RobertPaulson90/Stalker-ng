@@ -5,8 +5,10 @@
 
 	$output = "{\"players\": [";
 	while ($row = $query->fetch_array(MYSQLI_ASSOC)) {
-		$output .= $row["data"];
-		$output .= ",";
+		if ($row["data"]) {
+			$output .= $row["data"];
+			$output .= ",";
+		}
 	}
 
 	$output = rtrim($output, ",") . "]}";
