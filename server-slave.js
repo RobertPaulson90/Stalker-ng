@@ -5,12 +5,10 @@ var util = require('util'),
 	exec = require('child_process').exec,
 	cheerio = require('cheerio'),
 	http = require('http'),
-	child,
-	game = "bf3",
 	baseUrl = "http://battlelog.battlefield.com";
 
 function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, playerUrl, callback) {
-	child = exec(util.format('curl --socks5 127.0.0.1:9050 %s/%s/user/%s', baseUrl, game, playerName),
+	exec(util.format('curl --socks5 127.0.0.1:9050 %s/%s/user/%s', baseUrl, game, playerName),
 		function (curlError, data, stderr) {
 			var error = "",
 				gone = false,
