@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>BF3Stalker</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Stalk your favorite Battlefield 3 Youtuber and/or Dice employee!">
+    <meta name="keywords" content="bf3 stalker, dice bf3 players, pubstars, battlefield 3, bf3, stalk bf3 players, knife dice employees, knifing pubstars, bf3stalker">
+
+	<!-- Styles -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/jquery.dataTables.css" rel="stylesheet">
+    <link href="css/bf3stalker.css" rel="stylesheet">
+
+	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Google Analytics-->
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-32772391-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+</head>
+<body>
+	<div class="navbar navbar-fixed-top navbar-inverse">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a class="brand" id="brand-button" href="#players">BF3 Stalker</a>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li class="active"><a href="#" id="players-button" class="menu-button">Players</a></li>
+						<li><a href="#opt-out" id="opt-out-button" class="menu-button">Opt-out</a></li>
+						<li><a href="#about" id="about-button" class="menu-button">About</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+
+	<div class="container">
+		<div class="hero-unit"> <a href="#"  id="players-button"><img src="img/bf3stalker_simple_header.png" width="331" height="107" alt="BF3 Stalker Homepage"></a></div>
+	</div>
+
+	<div class="container page" id="players-page" style="display:none">
+		<div class="alert alert-success" style="display:none" id="success">
+			We've now passed 100.000 page views, we thank you for your support!
+			<a class="close" data-dismiss="alert" href="#">&times;</a>
+		</div>
+		<div id="player-table" class="row">
+			<!-- The table that contains players -->
+		</div>
+	</div>
+
+	<div class="container page" id="opt-out-page" style="display:none">
+		<div class="row-fluid" id="opt-out-page-row">
+			<div class="span12">
+				<h2>Opt-out</h2>
+				<p></p>
+				Despite the fact that the data we present is accessible to anyone with a web browser, we have decided to allow an opt-out from our services. Number one reason being that DICE really <i>should</i> implement some privacy features, but also because there has been concern from certain individuals, that the mere existence of our website has caused an increase in "griefing" for these players. While we are skeptical, we believe the right thing to do is allow players to decide themselves whether they wish to be here or not :)
+				<p></p>
+				If you wish to be removed (or added) from our site, please contact us at <a href="mailto:admin@bf3stalker.com">admin@bf3stalker.com</a>.
+				<p></p>
+				<b>The following players have requested to be removed thus far:</b>
+				<p></p>
+				<ul><li>LevelCap</a></li></ul>
+				<ul><li>InTheWorks</a></li></ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="container page" id="about-page" style="display:none">
+		<div class="row-fluid" id="about-page-row">
+			<div class="span4">
+				<h2>About</h2>
+				<p>
+					<p>
+						Hi! And welcome to bf3stalker.com :) Just a fun idea created by <a href="https://twitter.com/poul_w" target="_blank">Poul Wittig</a> & <a href="https://twitter.com/fredefl" target="_blank">Frederik Lassen</a> to track your favorite players.</p><p class="c0"></p><p><span>We hope this site will be useful, and let us know if there is anyone we need to add or update. Have fun!</p>
+				</p>
+	        </div>
+			<div class="span4">
+				<h2>Contact</h2>
+				<p>
+					<p><span>Keep in mind the data presented on this page is accessible for anyone with a web browser. We just want to make it easier to play with your idols or snag them DICE tags :)</p><p class="c0"></p><p class="c0"></p><p><span>Also, we are obviously not affiliated with EA/DICE or anyone but ourselves.</p><p class="c0"></p><p><span>Contact us at: </span><span class="c2"><a href="mailto:admin@bf3stalker.com">admin@bf3stalker.com</a></span>
+				</p>
+			</div>
+			<div class="span4">
+				<h2>Non-profit</h2>
+				<p>
+					<p><span>This site is hosted in the cloud (Amazon EC2), behind CloudFlare. </p><p><span>Technologies used include the Amazon AMI, Apache, PHP, Google Analytics, New Relic, Bootstrap, phpQuery, jQuery, JSON &amp; EC2 api tools for daily snapshots. To simplify & save memory, we avoid SQL by storing our player data in a .csv file.</span></p>
+				</p>
+			</div>
+		</div>
+		<div class="row-fluid" id="dice-message-row">
+			<div class="span12">
+				<h2>A message for EA/DICE</h2>
+				This message is specifically written for EA/DICE, who might find this kind of service to be against their interests. Our site does nothing besides download (crawl) specific players Battlelog pages to investigate what server they are playing on. We have a <i>cron</i> task set up for this, that is executed every 5 minutes. Considering that a single Battlelog profile, on average, has a size of about 15kB, we generate 15 * 160 = 2400 kilobytes per 5 minutes, which is 2400 / 5 = 480 kilobytes per minute. That is equivalent to 480 / 60 = 8 kilobytes per second. Keep in mind that we are requesting all data compressed with gzip, so you can, on average, lower the number by about 60%. We sincerely hope that you will allow us to continue with running this informative service, <b>and encourage people to go play Battlefield with their idols.</b> Thanks!
+			</div>
+		</div>
+	</div>
+
+	<!-- Javascript -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/bf3stalker.js"></script>
+</body>
+</html>

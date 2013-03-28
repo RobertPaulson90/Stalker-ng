@@ -1,0 +1,114 @@
+/* Bf3 Stalker CSS */
+
+body {
+	background: url(../img/bf3stalker_simple_bg.jpg) no-repeat top center ;!important;
+	background-color: black !important;
+}
+
+.hero-unit{
+	background: none !important;
+	padding: 0px !important;
+	border-radius: 6px !important; 
+	margin-bottom: 6px !important;
+	margin-top: 3px !important;
+}
+
+@media all and (min-width: 980px) {
+	.container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {
+		width: 940px !important;
+	}
+}
+
+table {
+	background-color: white !important;
+}
+
+.row {
+	margin-left: 0px !important;
+}
+
+.dataTables_info {
+	color: #FFF;
+}
+
+label {
+	margin-bottom: 0px !important;
+}
+
+tr {
+	min-height: 35px;
+}
+
+body {
+	padding-top: 60px;
+	overflow-y: scroll;
+}
+
+@media all and (max-width: 979px) {
+	body {
+		padding-top: 0px !important;
+	}
+}
+
+.dataTables_info {
+	margin-bottom: 20px;
+}
+
+.span4, .span12 {
+	padding: 20px;
+}
+
+.row-fluid {
+	background: white;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	opacity:0.9;
+	filter:alpha(opacity=90);
+	margin: 0px;
+}
+
+#about-page-row {
+	
+
+}
+
+#dice-message-row {
+	margin-top:30px;
+	margin-bottom:20px;
+}
+
+#example_length label {
+	display:inline !important;
+	padding: 5px;
+	background:#ffffff;
+	opacity: .8;
+	color:#000000;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	filter: alpha(opacity=90);
+}
+
+.platform {
+	background-image:url(../img/game_icons.png);
+	float:right;
+	height: 11px;
+}
+
+.platform-PS3 {
+	background-position: 0px -1px;
+	width:41px;
+}
+
+.platform-XBOX {
+	margin-right: 2px;
+	background-position: 0px -27px;
+	width:39px;
+}
+
+.platform-PC {
+	margin-right: 10px;
+	background-position: 0px -14px;
+	width:31px;
+}
