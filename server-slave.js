@@ -13,6 +13,7 @@ program
 	.option('-h, --master_host <host>', 'master hostname')
 	.option('-p, --master_path <path>', 'master path')
 	.option('-P, --master_port <port>', 'master port')
+	.option('-d, --debug', 'debug mode')
 	.parse(process.argv);
 
 if (!program.master_port)
@@ -112,7 +113,8 @@ function findPlayer (callback) {
 	};
 
 	http.get(options, function(res) {
-		console.log("Got response: " + res.statusCode);
+		if (program.debug || res.statusCode != 200)
+			console.log("Got response: " + res.statusCode);
 
 		res.on("data", function(chunk) {
 			callback(JSON.parse(chunk));
@@ -123,18 +125,27 @@ function findPlayer (callback) {
 }
 
 function loop () {
-	console.log("Finding a new player...");
+	if (program.debug)
+		console.log("Finding a new player...");
+
 	findPlayer(function (playerData) {
-		console.log("Found player!");
-		console.log("Querying Battlelog...");
+		if (program.debug) {
+			console.log("Found player!");
+			console.log("Querying Battlelog...");
+		}
+
 		getPlayer(playerData.name, playerData.alias, playerData.platform, playerData.game, playerData.type, playerData.url, function (error, result) {
-			console.log("Got response from Battlelog!");
-			console.log("PLAYER: " + playerData.name);
-			console.log(error, result);
-			console.log("Sending player...");
+			if (program.debug || error != "") {
+				console.log(error, result);
+				console.log("Got response from Battlelog!");
+				console.log("PLAYER: " + playerData.name);
+				console.log("Sending player...");
+			}
 			sendPlayer(result, function (response) {
-				console.log("Player sent!");
-				console.log(response);
+				if (program.debug) {
+					console.log("Player sent!");
+					console.log(response);
+				}
 
 				loop();
 			});
@@ -142,7 +153,5 @@ function loop () {
 	});
 };
 
+console.log("Server Slave started!");
 loop();
-
-
-
