@@ -4,11 +4,12 @@
 var util = require('util'),
 	exec = require('child_process').exec,
 	cheerio = require('cheerio'),
+	http = require('http'),
 	child,
 	game = "bf3",
 	baseUrl = "http://battlelog.battlefield.com";
 
-function getPlayer (playerName, playerPlatform, game, callback) {
+function getPlayer (playerName, playerPlatform, game, playerType, playerUrl, callback) {
 	child = exec(util.format('curl --socks5 127.0.0.1:9050 %s/%s/user/%s', baseUrl, game, playerName),
 		function (curlError, data, stderr) {
 			var error = "",
@@ -17,6 +18,8 @@ function getPlayer (playerName, playerPlatform, game, callback) {
 					name: 			playerName,
 					platform: 		playerPlatform,
 					battlelog: 		util.format("%s/%s/%s", baseUrl, game, playerName),
+					type: 			playerType,
+					url: 			playerUrl,
 					status: 		"No",
 					playing: 		false,
 					success: 		false,
@@ -51,7 +54,7 @@ function getPlayer (playerName, playerPlatform, game, callback) {
 				}
 
 				if (curlError !== null) {
-			 		console.log('exec error: ' + error);
+					console.log('exec error: ' + error);
 				}
 			}
 
@@ -60,18 +63,72 @@ function getPlayer (playerName, playerPlatform, game, callback) {
 	);
 }
 
+function sendPlayer (data, callback) {
 
-getPlayer("Airbager", "PC", game, function (error, result) {
-	console.log("PLAYER: Airbager");
-	console.log(error, result);
-});
+	var post_data = JSON.stringify(data);
 
-getPlayer("fredeffl", "PC", game, function (error, result) {
-	console.log("PLAYER: fredeffl");
-	console.log(error, result);
-});
+	var post_options = {
+		host: "127.0.0.1",
+		port: 80,
+		path: "/bf3/server-master.php",
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Length': post_data.length
+		}
+	};
 
-getPlayer("fucksdsdsdadasdasd", "PC", game, function (error, result) {
-	console.log("PLAYER: fucksdsdsdadasdasd");
-	console.log(error, result);
-});
+	var post_req = http.request(post_options, function(res) {
+	res.setEncoding('utf8');
+		res.on('data', function (chunk) {
+			callback(chunk);
+		});
+	});
+
+	// write parameters to post body
+	post_req.write(post_data);
+	post_req.end();
+}
+
+function findPlayer (callback) {
+	var options = {
+		host: '127.0.0.1',
+		port: 80,
+		path: '/bf3/server-master.php'
+	};
+
+	http.get(options, function(res) {
+		console.log("Got response: " + res.statusCode);
+
+		res.on("data", function(chunk) {
+			callback(JSON.parse(chunk));
+		});
+	}).on('error', function(e) {
+		console.log("Got error: " + e.message);
+	});
+}
+
+function loop () {
+	console.log("Finding a new player...");
+	findPlayer(function (playerData) {
+		console.log("Found player!");
+		console.log("Querying Battlelog...");
+		getPlayer(playerData.name, playerData.platform, playerData.game, playerData.type, playerData.url, function (error, result) {
+			console.log("Got response from Battlelog!");
+			console.log("PLAYER: " + playerData.name);
+			console.log(error, result);
+			console.log("Sending player...");
+			sendPlayer(result, function (response) {
+				console.log("Player sent!");
+				console.log(response);
+
+				loop();
+			});
+		});
+	});
+};
+
+loop();
+
+
+
