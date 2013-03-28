@@ -9,13 +9,13 @@ var util = require('util'),
 	game = "bf3",
 	baseUrl = "http://battlelog.battlefield.com";
 
-function getPlayer (playerName, playerPlatform, game, playerType, playerUrl, callback) {
+function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, playerUrl, callback) {
 	child = exec(util.format('curl --socks5 127.0.0.1:9050 %s/%s/user/%s', baseUrl, game, playerName),
 		function (curlError, data, stderr) {
 			var error = "",
 				gone = false,
 				result = {
-					name: 			playerName,
+					name: 			(playerAlias ? playerName + " " + playerAlias : playerName),
 					platform: 		playerPlatform,
 					battlelog: 		util.format("%s/%s/%s", baseUrl, game, playerName),
 					type: 			playerType,
@@ -113,7 +113,7 @@ function loop () {
 	findPlayer(function (playerData) {
 		console.log("Found player!");
 		console.log("Querying Battlelog...");
-		getPlayer(playerData.name, playerData.platform, playerData.game, playerData.type, playerData.url, function (error, result) {
+		getPlayer(playerData.name, playerData.alias, playerData.platform, playerData.game, playerData.type, playerData.url, function (error, result) {
 			console.log("Got response from Battlelog!");
 			console.log("PLAYER: " + playerData.name);
 			console.log(error, result);

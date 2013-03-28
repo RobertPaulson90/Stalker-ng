@@ -10,7 +10,7 @@ if ($type == "GET") {
 			echo "Failed to connect to MySQL: " . mysqli_connect_error();
 		}
 
-		$query = $mysqlConnection->query("SELECT id, name, platform, game, type, url FROM players WHERE id > $lastId ORDER BY id LIMIT 1");
+		$query = $mysqlConnection->query("SELECT id, alias, name, platform, game, type, url FROM players WHERE id > $lastId ORDER BY id LIMIT 1");
 		if ($query->num_rows > 0) {
 			return $query->fetch_array(MYSQLI_ASSOC);
 		} else {
@@ -40,7 +40,7 @@ if ($type == "GET") {
 	$mysqlConnection = mysqli_connect("p:127.0.0.1","root","","stalker");
 
 	$data = file_get_contents('php://input');
-	$name = mysqli_real_escape_string($mysqlConnection, json_decode($data)->name);
+	$name = mysqli_real_escape_string($mysqlConnection, trim(preg_replace("/\([^)]+\)/","",json_decode($data)->name)));
 	$data = mysqli_real_escape_string($mysqlConnection, $data);
 
 	if ($name != "" && $data != "") {
