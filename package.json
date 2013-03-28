@@ -1,0 +1,10 @@
+{
+  "name": "Stalker-ng",
+  "description": "",
+  "author": "Frederik Fredslund Lassen <frederiklassen@gmail.com> and Poul Robert Wittig <poul@wittig.dk>",
+  "version": "0.0.1",
+  "dependencies": {
+    "commander": "*",
+    "cheerio": "*"
+  }
+}
