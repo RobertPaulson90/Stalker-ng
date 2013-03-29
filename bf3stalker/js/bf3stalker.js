@@ -40,7 +40,7 @@ function addToTable (playerData) {
 	});
 }
 function refreshData () {
-	$.getJSON("api/api.php", function (data) {
+	$.getJSON("api/api.php?game=bf3", function (data) {
 		$("#example").dataTable().fnClearTable();
 		addToTable(data.players);
 		//$("#example_length").html('<label>Data is continuously updated</label>');
@@ -59,7 +59,7 @@ $(document).ready(function() {
 		showPage("about");
 	});
 	showCorrectPage();
-	$.getJSON("api/api.php", function (data) {
+	$.getJSON("api/api.php?game=bf3", function (data) {
 		//$("#example_wrapper").prepend('<div id="example_length" class="dataTables_length"></div>');
 		refreshData();
 	});
