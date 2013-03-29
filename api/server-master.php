@@ -45,7 +45,7 @@ if ($type == "GET") {
 	$timestamp = time();
 
 	if ($name != "" && $data != "") {
-		$mysqlConnection->query("UPDATE players SET data='$data', timestamp='$timestamp' WHERE name='$name'");
+		$mysqlConnection->query("UPDATE players SET data='$data', timestamp='$timestamp', counter=counter+1 WHERE name='$name'");
 		echo "OK";
 	} else {
 		echo "ERROR";
