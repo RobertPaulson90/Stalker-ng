@@ -3,7 +3,7 @@
 
 	$game = $_GET['game'];
 	if ($game === "bf3" || $game === "bf4") {
-		$game = mysqli_real_escape_string($game);
+		$game = mysqli_real_escape_string($mysqlConnection, $game);
 		$query = $mysqlConnection->query("SELECT data FROM players WHERE game='$game' AND id > 0");
 
 		$output = "{\"players\": [";
