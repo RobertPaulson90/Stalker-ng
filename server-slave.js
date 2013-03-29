@@ -6,7 +6,8 @@ var util = require('util'),
 	cheerio = require('cheerio'),
 	http = require('http'),
 	program = require('commander'),
-	baseUrl = "http://battlelog.battlefield.com";
+	baseUrl = "http://battlelog.battlefield.com"
+	GLOBAL.shouldExit = false;
 
 program
 	.version('0.0.1')
@@ -147,11 +148,21 @@ function loop () {
 					console.log(response);
 				}
 
-				loop();
+				if (!GLOBAL.shouldExit)
+					loop();
+				else {
+					process.exit();
+					console.log("\nGracefully shutting down from SIGINT (Crtl-C)");
+				}
 			});
 		});
 	});
 };
+
+process.on( 'SIGINT', function() {
+	console.log("Alright, let's shut down!");
+	GLOBAL.shouldExit = true;
+});
 
 console.log("Server Slave started!");
 loop();
