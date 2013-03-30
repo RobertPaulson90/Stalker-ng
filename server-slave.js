@@ -6,8 +6,9 @@ var util = require('util'),
 	cheerio = require('cheerio'),
 	http = require('http'),
 	program = require('commander'),
-	baseUrl = "http://battlelog.battlefield.com"
-	GLOBAL.shouldExit = false;
+	baseUrl = "http://battlelog.battlefield.com",
+	torPort = 9050;
+GLOBAL.shouldExit = false;
 
 program
 	.version('0.0.1')
@@ -26,7 +27,7 @@ if (!program.master_host || !program.master_path) {
 }
 
 function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, playerUrl, callback) {
-	exec(util.format('curl --socks5 127.0.0.1:9050 %s/%s/user/%s', baseUrl, game, playerName),
+	exec(util.format('curl --socks5 127.0.0.1:%s --compress -H "Accept-Encoding: gzip,deflate" %s/%s/user/%s', torPort, baseUrl, game, playerName),
 		function (curlError, data, stderr) {
 			var error = "",
 				gone = false,
@@ -165,4 +166,14 @@ process.on( 'SIGINT', function() {
 });
 
 console.log("Server Slave started!");
-loop();
+
+	exec(util.format('curl --socks5 127.0.0.1:%s http://bf3stalker.com/api/test-client.php', torPort),
+		function (curlError, data, stderr) {
+			if (data == "OK") {
+				loop();
+			} else {
+				console.log("Could not connect to server over Tor. Either Tor is not running/working or the server is down.");
+				process.exit();
+			}
+		}
+	);
