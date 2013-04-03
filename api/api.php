@@ -1,5 +1,6 @@
 <?php
 	include("db.php");
+	include("raven.php");
 
 	$game = $_GET['game'];
 	if ($game === "bf3" || $game === "bf4") {

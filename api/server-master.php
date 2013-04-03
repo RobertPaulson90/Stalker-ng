@@ -1,4 +1,6 @@
 <?php
+include("raven.php");
+
 $type = $_SERVER['REQUEST_METHOD'];
 if ($type == "GET") {
 	function queryDB ($lastId) {
