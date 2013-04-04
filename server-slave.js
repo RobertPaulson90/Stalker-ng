@@ -6,6 +6,7 @@ var util = require('util'),
 	cheerio = require('cheerio'),
 	http = require('http'),
 	program = require('commander'),
+	raven = require('raven'),
 	baseUrl = "http://battlelog.battlefield.com",
 	torPort = 9050;
 GLOBAL.shouldExit = false;
@@ -24,6 +25,16 @@ if (!program.master_port)
 if (!program.master_host || !program.master_path) {
 	console.log("You need to specify the host and path!");
 	program.help();
+}
+
+if (!program.debug) {
+	process.env.NODE_ENV = 'production';
+	console.log("Setting up Sentry/Raven...");
+	var client = new raven.Client('https://5fe4c20bdc5948ea9f9bb68f18060a12:9dec00111cfa49e5b61d16d322700a69@app.getsentry.com/7136');
+	client.patchGlobal();
+	console.log("Sentry/Raven set up!");
+} else {
+	console.log("Debug mode was set, Sentry/Raven will not be used.");
 }
 
 function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, playerUrl, callback) {
