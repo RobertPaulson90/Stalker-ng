@@ -17,6 +17,7 @@ program
 	.option('-p, --master_path <path>', 'master path')
 	.option('-P, --master_port <port>', 'master port')
 	.option('-d, --debug', 'debug mode')
+	.option('-v, --visual', 'shows visual process')
 	.parse(process.argv);
 
 if (!program.master_port)
@@ -111,6 +112,12 @@ function sendPlayer (data, callback) {
 		res.on('data', function (chunk) {
 			callback(chunk);
 		});
+		res.on('error', function (e) {
+			console.log("Error while sending to the server!", e.message);
+			if (!program.debug)
+				client.captureMessage('Error while sending to the server', e);
+			sendPlayer(data, callback);
+		});
 	});
 
 	// write parameters to post body
@@ -133,7 +140,9 @@ function findPlayer (callback) {
 			callback(JSON.parse(chunk));
 		});
 	}).on('error', function(e) {
-		console.log("Got error: " + e.message);
+		console.log("Error while receiving from the server!", e.message);
+		if (!program.debug)
+			client.captureMessage('Error while receiving from the server', e);
 	});
 }
 
@@ -154,6 +163,9 @@ function loop () {
 				console.log("PLAYER: " + playerData.name);
 				console.log("Sending player...");
 			}
+			if (program.visual) 
+				console.log("PLAYER: " + playerData.name);
+
 			sendPlayer(result, function (response) {
 				if (program.debug) {
 					console.log("Player sent!");
@@ -178,7 +190,7 @@ process.on( 'SIGINT', function() {
 
 console.log("Server Slave started!");
 
-	exec(util.format('curl --socks5 127.0.0.1:%s http://bf3stalker.com/api/test-client.php', torPort),
+	exec(util.format('curl --socks5-hostname 127.0.0.1:%s http://bf3stalker.com/api/test-client.php', torPort),
 		function (curlError, data, stderr) {
 			if (data == "OK") {
 				loop();
