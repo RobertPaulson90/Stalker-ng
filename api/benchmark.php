@@ -2,7 +2,7 @@
 
 	include("db.php");
 	
-	$query = $mysqlConnection->query("SELECT * FROM players WHERE id > 0 ORDER BY timestamp LIMIT 1");
+	$query = $mysqlConnection->query("SELECT * FROM players WHERE id > 0 AND timestamp > 0 ORDER BY timestamp LIMIT 1");
 	$row = $query->fetch_array(MYSQLI_ASSOC);
 	$timestamp = $row["timestamp"];
 	$difference = time() - $timestamp;
