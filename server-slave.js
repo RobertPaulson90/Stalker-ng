@@ -38,7 +38,7 @@ if (!program.debug) {
 }
 
 function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, playerUrl, callback) {
-	exec(util.format('curl --socks5 127.0.0.1:%s --compress -H "Accept-Encoding: gzip,deflate" %s/%s/user/%s', torPort, baseUrl, game, playerName),
+	exec(util.format('curl --socks5-hostname 127.0.0.1:%s --compress -H "Accept-Encoding: gzip,deflate" %s/%s/user/%s', torPort, baseUrl, game, playerName),
 		function (curlError, data, stderr) {
 			var error = "",
 				gone = false,
