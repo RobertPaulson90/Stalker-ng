@@ -17,17 +17,6 @@ function showCorrectPage () {
 			break;
 	}
 }
-function timeConverter(UNIX_timestamp){
-	var a = new Date(UNIX_timestamp*1000);
-	var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-	var year = a.getFullYear();
-	var month = months[a.getMonth()];
-	var date = a.getDate();
-	var hour = a.getHours();
-	var min = a.getMinutes();
-	var time = date + ' ' + month + ' ' + year + ' at ' + (hour < 10 ? '0' + hour : hour) + ':' + (min < 10 ? '0' + min : min);
-	return time;
-}
 function addToTable (playerData) {
 	$(playerData).each(function (index, player) {
 			$("#example").dataTable().fnAddData([
@@ -71,12 +60,12 @@ $(document).ready(function() {
 		"aaData": [
 			/* Reduced data set */
 		],
-		"aaSorting": [[ 2, "desc" ]],
+		"aaSorting": [[2, "desc"], [0, "desc"]],
 		"aoColumns": [
-			{ "sTitle": "Type" },
-			{ "sTitle": "Name" },
-			{ "sTitle": "Playing" },
-			{ "sTitle": "Server" }
+			{"sTitle": "Type"},
+			{"sTitle": "Name"},
+			{"sTitle": "Playing"},
+			{"sTitle": "Server"}
 		]
 	});
 	$(".dataTables_filter").before('<a class="btn" id="refresh-button" style="float:right; margin-left:5px;"><i class="icon-refresh"></i></a>');
