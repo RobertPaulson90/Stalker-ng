@@ -32,17 +32,19 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 			var error = "",
 				gone = false,
 				result = {
-					name: 			(playerAlias ? playerName + " (" + playerAlias + ")" : playerName),
-					platform: 		playerPlatform,
-					battlelog: 		util.format("%s/%s/user/%s", baseUrl, game, playerName),
-					type: 			playerType,
-					url: 			playerUrl,
-					status: 		"No",
-					playing: 		false,
-					success: 		false,
-					serverUrl: 		"", 
-					serverTitle: 	""
+					/*name*/		n: 	playerName,
+					/*platform*/	p: 	playerPlatform,
+					/*type*/		t: 	playerType,
+					/*url*/			u: 	playerUrl,
+					/*status*/  	s: 	0 // 0 = No, 1 = Online, 2 = Playing
+					/*serverUrl	su: "" */
+					/*serverTitle st: ""*/
+					/*alias		a:  playerAlias, */
 				};
+
+			if (playerAlias) {
+				result.a = playerAlias;
+			}
 
 			if (data == "") {
 				error = "Error while getting: " + playerName;
@@ -51,19 +53,17 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 
 				$(".common-playing-link a").map(function(i, el) {
 					// this === el
-					result.serverUrl = baseUrl + $(this).attr("href");
-					result.serverTitle = $(this).attr("title");
-					result.status = "Playing";
-					result.playing = true;
-					result.success = true;
+					result.su = baseUrl + $(this).attr("href"); // Url
+					result.st = $(this).attr("title");			// Title
+					result.s = 2;								// Playing
 				});
 
 				$("a[href='/bf3/user/" + playerName + "/'].base-avatar-status-overlay-online").map(function() {
-					result.status = "Online";
+					result.s = 1; // Online
 				});
 
 				$("div.base-middle-error").map(function(i, el) {
-					gone = true;
+					gone = true; // Gone
 				});
 
 				if (gone) {

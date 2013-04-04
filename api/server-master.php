@@ -42,7 +42,7 @@ if ($type == "GET") {
 	include('db.php');
 
 	$data = file_get_contents('php://input');
-	$name = mysqli_real_escape_string($mysqlConnection, trim(preg_replace("/\([^)]+\)/","",json_decode($data)->name)));
+	$name = mysqli_real_escape_string($mysqlConnection, trim(preg_replace("/\([^)]+\)/","",json_decode($data)->n)));
 	$data = mysqli_real_escape_string($mysqlConnection, $data);
 	$timestamp = time();
 

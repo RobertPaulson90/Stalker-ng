@@ -1,3 +1,5 @@
+var game = "bf3";
+
 function showPage (page) {
 	$(".page").hide();
 	$(".menu-button").parent().removeClass("active");
@@ -17,15 +19,33 @@ function showCorrectPage () {
 			break;
 	}
 }
+function parsePlayerStatus (status) {
+	switch (status) {
+		case 0: 
+			return "No"
+			break;
+		case 1:
+			return "Online"
+			break;
+		case 2:
+			return "Playing"
+			break;
+		default:
+			return "No"
+	}
+}
+
 function addToTable (playerData) {
 	$(playerData).each(function (index, player) {
+		if (player.n) {
 			$("#example").dataTable().fnAddData([
-				'<div class="platform platform-' + player.platform + '"></div>' +
-				(player.url !== '#' ? '<a target="_blank" href="' + player.url + '">' + player.type + '</a>' : player.type), 
-				'<a target="_blank" href="' + player.battlelog + '">' + player.name + '</a>',
-				player.status,
-				(player.playing ? '<a target="_blank" href="' + player.serverUrl + '">' + player.serverTitle + '</a>' : "")
+				'<div class="platform platform-' + player.p + '"></div>' +
+				(player.url !== '#' ? '<a target="_blank" href="' + player.u + '">' + player.t + '</a>' : player.t), 
+				'<a target="_blank" href="' + "http://battlelog.battlefield.com/" + game + "/user/" + player.n + '">' + (player.a ? player.n + " (" + player.a + ")" : player.n) + '</a>',
+				parsePlayerStatus(player.s),
+				(player.s == 2 ? '<a target="_blank" href="' + player.su + '">' + player.st + '</a>' : "")
 			]);
+		}
 	});
 }
 function refreshData () {
