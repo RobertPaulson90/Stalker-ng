@@ -10,6 +10,8 @@ var util = require('util'),
 	baseUrl = "http://battlelog.battlefield.com",
 	torPort = 9050;
 GLOBAL.shouldExit = false;
+GLOBAL.retries = 0;
+GLOBAL.maxRetries = 3;
 
 program
 	.version('0.0.1')
@@ -39,7 +41,7 @@ if (!program.debug) {
 }
 
 function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, playerUrl, callback) {
-	exec(util.format('curl --socks5-hostname 127.0.0.1:%s --compress -H "Accept-Encoding: gzip,deflate" %s/%s/user/%s', torPort, baseUrl, game, playerName),
+	exec(util.format('curl --socks5-hostname 127.0.0.1:%s --connect-timeout 10 --compress -H "Accept-Encoding: gzip,deflate" %s/%s/user/%s', torPort, baseUrl, game, playerName),
 		function (curlError, data, stderr) {
 			var error = "",
 				gone = false,
@@ -109,15 +111,20 @@ function sendPlayer (data, callback) {
 
 	var post_req = http.request(post_options, function(res) {
 	res.setEncoding('utf8');
-		res.on('data', function (chunk) {
+	res.on('data', function (chunk) {
+			GLOBAL.retries = 0;
 			callback(chunk);
 		});
-		res.on('error', function (e) {
-			console.log("Error while sending to the server!", e.message);
-			if (!program.debug)
-				client.captureMessage('Error while sending to the server', e);
+	});
+	post_req.on('error', function (e) {
+		console.log("Error while sending to the server!", e.message);
+		if (!program.debug)
+			client.captureMessage('Error while sending to the server', e);
+		GLOBAL.retries++;
+		if (GLOBAL.retries <= GLOBAL.maxRetries) {
+			console.log("Retry number " + GLOBAL.retries);
 			sendPlayer(data, callback);
-		});
+		}
 	});
 
 	// write parameters to post body
@@ -131,6 +138,8 @@ function findPlayer (callback) {
 		port: program.master_port,
 		path: program.master_path,
 	};
+	if (GLOBAL.shouldExit)
+		return;
 
 	http.get(options, function(res) {
 		if (program.debug || res.statusCode != 200)
@@ -138,11 +147,17 @@ function findPlayer (callback) {
 
 		res.on("data", function(chunk) {
 			callback(JSON.parse(chunk));
+			GLOBAL.retries = 0;
 		});
 	}).on('error', function(e) {
 		console.log("Error while receiving from the server!", e.message);
 		if (!program.debug)
 			client.captureMessage('Error while receiving from the server', e);
+		GLOBAL.retries++;
+		if (GLOBAL.retries <= GLOBAL.maxRetries) {
+			console.log("Retry number " + GLOBAL.retries);
+			findPlayer(callback);
+		}
 	});
 }
 
@@ -190,7 +205,7 @@ process.on( 'SIGINT', function() {
 
 console.log("Server Slave started!");
 
-	exec(util.format('curl --socks5-hostname 127.0.0.1:%s http://bf3stalker.com/api/test-client.php', torPort),
+	exec(util.format('curl --socks5-hostname 127.0.0.1:%s %s/api/test-client.php', torPort, program.master_host),
 		function (curlError, data, stderr) {
 			if (data == "OK") {
 				loop();
