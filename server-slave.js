@@ -85,7 +85,7 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 				}
 
 				if (curlError !== null) {
-					console.log('exec error: ' + error);
+					client.captureError(e);
 				}
 			}
 
@@ -117,12 +117,10 @@ function sendPlayer (data, callback) {
 		});
 	});
 	post_req.on('error', function (e) {
-		console.log("Error while sending to the server!", e.message);
 		if (!program.debug)
-			client.captureMessage('Error while sending to the server', e);
+			client.captureError(new Error('Error sending to the server'));
 		GLOBAL.retries++;
 		if (GLOBAL.retries <= GLOBAL.maxRetries) {
-			console.log("Retry number " + GLOBAL.retries);
 			sendPlayer(data, callback);
 		}
 	});
@@ -150,12 +148,10 @@ function findPlayer (callback) {
 			GLOBAL.retries = 0;
 		});
 	}).on('error', function(e) {
-		console.log("Error while receiving from the server!", e.message);
 		if (!program.debug)
-			client.captureMessage('Error while receiving from the server', e);
+			client.captureError(new Error('Error while receiving from the server'));
 		GLOBAL.retries++;
 		if (GLOBAL.retries <= GLOBAL.maxRetries) {
-			console.log("Retry number " + GLOBAL.retries);
 			findPlayer(callback);
 		}
 	});
@@ -172,11 +168,14 @@ function loop () {
 		}
 
 		getPlayer(playerData.name, playerData.alias, playerData.platform, playerData.game, playerData.type, playerData.url, function (error, result) {
-			if (program.debug || error != "") {
+			if (program.debug) {
 				console.log(error, result);
 				console.log("Got response from Battlelog!");
 				console.log("PLAYER: " + playerData.name);
 				console.log("Sending player...");
+			}
+			if (error != "") {
+				client.captureError(new Error(error));
 			}
 			if (program.visual) 
 				console.log("PLAYER: " + playerData.name);
@@ -210,7 +209,7 @@ console.log("Server Slave started!");
 			if (data == "OK") {
 				loop();
 			} else {
-				console.log("Could not connect to server over Tor. Either Tor is not running/working or the server is down.");
+				console.log("Could not connect to server over Tor.");
 				process.exit();
 			}
 		}
