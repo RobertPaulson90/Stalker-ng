@@ -1,6 +1,3 @@
-'use strict';
-/*jshint node:true*/
-
 var util = require('util'),
 	exec = require('child_process').exec,
 	cheerio = require('cheerio'),
