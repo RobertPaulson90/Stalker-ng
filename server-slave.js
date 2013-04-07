@@ -43,7 +43,7 @@ if (!program.debug) {
 function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, playerUrl, callback) {
 	exec(util.format('curl --socks5-hostname 127.0.0.1:%s --connect-timeout 10 --compress -H "Accept-Encoding: gzip,deflate" %s/%s/user/%s', torPort, baseUrl, game, playerName),
 		function (curlError, data, stderr) {
-			var error = "",
+			var error = {key:"", value:""},
 				gone = false,
 				result = {
 					/*name*/		n: 	playerName,
@@ -61,7 +61,8 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 			}
 
 			if (data == "") {
-				error = "Error while getting: " + playerName;
+				error.key = "Error while getting player";
+				error.value = playerName;
 			} else {
 				var $ = cheerio.load(data);
 
@@ -81,7 +82,8 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 				});
 
 				if (gone) {
-					error = "Player is gone: " + playerName;
+					error.key = "Player is gone";
+					error.value = playerName;
 				}
 
 				if (curlError !== null) {
@@ -174,8 +176,8 @@ function loop () {
 				console.log("PLAYER: " + playerData.name);
 				console.log("Sending player...");
 			}
-			if (error != "") {
-				client.captureError(new Error(error));
+			if (error.key != "") {
+				client.captureMessage(error.key, {level: 'info', extra: {data: error.value}});
 			}
 			if (program.visual) 
 				console.log("PLAYER: " + playerData.name);
