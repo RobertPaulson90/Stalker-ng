@@ -85,7 +85,7 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 				}
 
 				if (curlError !== null) {
-					client.captureError(e);
+					client.captureError(new Error(e));
 				}
 			}
 
@@ -209,6 +209,7 @@ console.log("Server Slave started!");
 			if (data == "OK") {
 				loop();
 			} else {
+				client.captureError(new Error("Could not connect to server over Tor."));
 				console.log("Could not connect to server over Tor.");
 				process.exit();
 			}
