@@ -77,6 +77,7 @@ $(document).ready(function() {
 	$('#example').dataTable( {
 		"bPaginate": false,
 		"bAutoWidth": true,
+		"oLanguage": { "sSearch": "" },
 		"aaData": [
 			/* Reduced data set */
 		],
