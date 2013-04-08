@@ -86,7 +86,7 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 					error.value = playerName;
 				}
 
-				if (curlError !== null) {
+				if (curlError !== null && client) {
 					client.captureError(new Error(e));
 				}
 			}
@@ -119,7 +119,7 @@ function sendPlayer (data, callback) {
 		});
 	});
 	post_req.on('error', function (e) {
-		if (!program.debug)
+		if (!program.debug && client)
 			client.captureError(new Error('Error sending to the server'));
 		GLOBAL.retries++;
 		if (GLOBAL.retries <= GLOBAL.maxRetries) {
@@ -150,7 +150,7 @@ function findPlayer (callback) {
 			GLOBAL.retries = 0;
 		});
 	}).on('error', function(e) {
-		if (!program.debug)
+		if (!program.debug && client)
 			client.captureError(new Error('Error while receiving from the server'));
 		GLOBAL.retries++;
 		if (GLOBAL.retries <= GLOBAL.maxRetries) {
@@ -177,7 +177,8 @@ function loop () {
 				console.log("Sending player...");
 			}
 			if (error.key != "") {
-				client.captureMessage(error.key, {level: 'info', extra: {data: error.value}});
+				if (client) 
+					client.captureMessage(error.key, {level: 'info', extra: {data: error.value}});
 			}
 			if (program.visual) 
 				console.log("PLAYER: " + playerData.name);
@@ -211,7 +212,8 @@ console.log("Server Slave started!");
 			if (data == "OK") {
 				loop();
 			} else {
-				client.captureError(new Error("Could not connect to server over Tor."));
+				if (client)
+					client.captureError(new Error("Could not connect to server over Tor."));
 				console.log("Could not connect to server over Tor.");
 				process.exit();
 			}
