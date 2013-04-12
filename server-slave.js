@@ -15,6 +15,7 @@ GLOBAL.maxRetries = 3;
 
 program
 	.version('0.0.1')
+	.option('-c, --client_name <name>', 'client name')
 	.option('-h, --master_host <host>', 'master hostname')
 	.option('-p, --master_path <path>', 'master path')
 	.option('-P, --master_port <port>', 'master port')
@@ -38,6 +39,10 @@ if (!program.debug) {
 	console.log("Sentry/Raven set up!");
 } else {
 	console.log("Debug mode was set, Sentry/Raven will not be used.");
+}
+
+if (!program.client_name) {
+	program.client_name = "Generic";
 }
 
 function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, playerUrl, callback) {
@@ -107,7 +112,8 @@ function sendPlayer (data, callback) {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Content-Length': post_data.length
+			'Content-Length': post_data.length,
+			'Client-Name': program.client_name
 		}
 	};
 

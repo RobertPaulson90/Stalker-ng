@@ -41,13 +41,19 @@ if ($type == "GET") {
 } else if ($type == "POST") {
 	include('db.php');
 
+	$client_name = "not defined";
+
+	if (isset($_SERVER["Client-Name"])) {
+		$client_name = mysqli_real_escape_string($mysqlConnection, $_SERVER["Client-Name"]);
+	}
+
 	$data = file_get_contents('php://input');
 	$name = mysqli_real_escape_string($mysqlConnection, trim(preg_replace("/\([^)]+\)/","",json_decode($data)->n)));
 	$data = mysqli_real_escape_string($mysqlConnection, $data);
 	$timestamp = time();
 
 	if ($name != "" && $data != "") {
-		$mysqlConnection->query("UPDATE players SET data='$data', timestamp='$timestamp', counter=counter+1 WHERE name='$name'");
+		$mysqlConnection->query("UPDATE players SET data='$data', timestamp='$timestamp', counter=counter+1, client_name='$client_name' WHERE name='$name'");
 		echo "OK";
 	} else {
 		echo "ERROR";
