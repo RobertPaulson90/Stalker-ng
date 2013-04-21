@@ -96,7 +96,18 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 				}
 			}
 
-			callback(error, result);
+			if (error.key != "") {
+				if (program.debug || program.visual) {
+					console.log("Error getting player: " + playerName + " retrying...");
+				}
+				GLOBAL.retries++;
+				if (GLOBAL.retries <= GLOBAL.maxRetries) {
+					getPlayer(playerName, playerAlias, playerPlatform, game, playerType, playerUrl, callback);
+				}
+			} else {
+				GLOBAL.retries = 0;
+				callback(error, result);
+			}
 		}
 	);
 }
@@ -125,11 +136,12 @@ function sendPlayer (data, callback) {
 		});
 	});
 	post_req.on('error', function (e) {
-		if (!program.debug && client)
-			client.captureError(new Error('Error sending to the server'));
 		GLOBAL.retries++;
 		if (GLOBAL.retries <= GLOBAL.maxRetries) {
 			sendPlayer(data, callback);
+		} else {
+			if (!program.debug && client)
+				client.captureError(new Error('Error sending to the server'));
 		}
 	});
 
@@ -156,11 +168,12 @@ function findPlayer (callback) {
 			GLOBAL.retries = 0;
 		});
 	}).on('error', function(e) {
-		if (!program.debug && client)
-			client.captureError(new Error('Error while receiving from the server'));
 		GLOBAL.retries++;
 		if (GLOBAL.retries <= GLOBAL.maxRetries) {
 			findPlayer(callback);
+		} else {
+			if (!program.debug && client)
+				client.captureError(new Error('Error while receiving from the server'));
 		}
 	});
 }
