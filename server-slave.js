@@ -46,7 +46,7 @@ if (!program.client_name) {
 }
 
 function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, playerUrl, callback) {
-	exec(util.format('curl --socks5-hostname 127.0.0.1:%s --connect-timeout 10 --compress -H "Accept-Encoding: gzip,deflate" %s/%s/user/%s', torPort, baseUrl, game, playerName),
+	exec(util.format('curl --socks5-hostname 127.0.0.1:%s --connect-timeout 10 --compress -H "Accept-Encoding: gzip,deflate" %s/%s/user/%s', torPort, baseUrl, game, encodeURIComponent(playerName)),
 		function (curlError, data, stderr) {
 			var error = {key:"", value:""},
 				gone = false,
@@ -89,6 +89,7 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 				if (gone) {
 					error.key = "Player is gone";
 					error.value = playerName;
+					result.g=1;
 				}
 
 				if (curlError !== null && client) {
@@ -96,7 +97,7 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 				}
 			}
 
-			if (error.key != "") {
+			if (error.key != "" && error.key !== "Player is gone") {
 				if (program.debug || program.visual) {
 					console.log("Error getting player: " + playerName + " retrying...");
 				}
