@@ -71,14 +71,14 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 			} else {
 				var $ = cheerio.load(data);
 
-				$(".common-playing-link a").map(function(i, el) {
+				$(".profile-view-status-info a").map(function(i, el) {
 					// this === el
 					result.su = baseUrl + $(this).attr("href"); // Url
 					result.st = $(this).attr("title");			// Title
 					result.s = 2;								// Playing
 				});
 
-				$("a[href='/bf3/user/" + playerName + "/'].base-avatar-status-overlay-online").map(function() {
+				$(".xxlarge.online").map(function() {
 					result.s = 1; // Online
 				});
 
@@ -104,6 +104,10 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 				GLOBAL.retries++;
 				if (GLOBAL.retries <= GLOBAL.maxRetries) {
 					getPlayer(playerName, playerAlias, playerPlatform, game, playerType, playerUrl, callback);
+				} else {
+					console.log("Fuck, lets bail!");
+					if (client)
+						client.captureMessage(error.key, {level: 'info', extra: {data: error.value}});
 				}
 			} else {
 				GLOBAL.retries = 0;
