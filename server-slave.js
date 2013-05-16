@@ -74,7 +74,7 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 				$(".profile-view-status-info a").map(function(i, el) {
 					// this === el
 					result.su = baseUrl + $(this).attr("href"); // Url
-					result.st = $(this).attr("title");			// Title
+					result.st = $(this).html();			// Title
 					result.s = 2;								// Playing
 				});
 
