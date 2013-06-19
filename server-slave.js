@@ -73,8 +73,8 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 
 				$(".xxlarge.playing").map(function() {
 					result.s = 2; // Online
-					result.su = "";
-					result.st = "";
+					result.su = "-";
+					result.st = "Join Server";
 				});
 
 				$(".profile-view-status-info a").map(function(i, el) {

@@ -38,12 +38,16 @@ function parsePlayerStatus (status) {
 function addToTable (playerData) {
 	$(playerData).each(function (index, player) {
 		if (player.n) {
+			if (player.su == "-") {
+				player.su = "http://battlelog.battlefield.com/" + game + "/user/" + player.n;
+			}
+
 			$("#example").dataTable().fnAddData([
 				'<div class="platform platform-' + player.p + '"></div>' +
 				(player.url !== '#' ? '<a target="_blank" href="' + player.u + '">' + player.t + '</a>' : player.t), 
 				'<a target="_blank" href="' + "http://battlelog.battlefield.com/" + game + "/user/" + player.n + '">' + (player.a ? player.n + " (" + player.a + ")" : player.n) + '</a>',
 				parsePlayerStatus(player.s),
-				(player.s == 2 ? '<a target="_blank" href="' + player.su + '">' + player.st + '</a>' : "")
+				(player.s == 2 ? '<a target="_blank" class="btn btn-warning" href="' + player.su + '">' + player.st + '</a>' : "")
 			]);
 		}
 	});
