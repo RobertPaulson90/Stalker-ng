@@ -71,10 +71,16 @@ function getPlayer (playerName, playerAlias, playerPlatform, game, playerType, p
 			} else {
 				var $ = cheerio.load(data);
 
+				$(".xxlarge.playing").map(function() {
+					result.s = 2; // Online
+					result.su = "";
+					result.st = "";
+				});
+
 				$(".profile-view-status-info a").map(function(i, el) {
 					// this === el
 					result.su = baseUrl + $(this).attr("href"); // Url
-					result.st = $(this).html();			// Title
+					result.st = $(this).html().trim();			// Title
 					result.s = 2;								// Playing
 				});
 
