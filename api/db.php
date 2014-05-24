@@ -1,1 +1,1 @@
-<?php $mysqlConnection = mysqli_connect("p:127.0.0.1","root","","stalker"); ?>
+<?php $mysqlConnection = mysqli_connect("p:mysql-rds3.clciqkbsbcmp.eu-west-1.rds.amazonaws.com","stalker","NTpkLNXMLlOHympw8pHV","stalker"); ?>
